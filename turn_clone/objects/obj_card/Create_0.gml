@@ -1,9 +1,9 @@
 /// @description Create
 
 enum face_index {
-	blue,
-	purple,
-	red
+	rock,
+	paper,
+	scissors
 }
 
-card_type = face_index.blue
+card_type = face_index.scissors

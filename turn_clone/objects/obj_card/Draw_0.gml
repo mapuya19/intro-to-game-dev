@@ -2,16 +2,16 @@
 
 if (face_up) {
 	switch card_type {
-		case face_index.blue:
-			sprite_index = spr_blue;
+		case face_index.rock:
+			sprite_index = spr_rock;
 			break;
 	
-		case face_index.purple:
-			sprite_index = spr_purple;
+		case face_index.paper:
+			sprite_index = spr_paper;
 			break;
 	
-		case face_index.red:
-			sprite_index = spr_red;
+		case face_index.scissors:
+			sprite_index = spr_scissors;
 			break;
 
 	}
