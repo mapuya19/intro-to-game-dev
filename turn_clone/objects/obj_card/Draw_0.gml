@@ -18,5 +18,5 @@ if (face_up) {
 } else {
 	sprite_index = spr_back;
 }
-	
-draw_sprite(sprite_index, image_index, x, y)
+
+draw_sprite(sprite_index, image_index, x, y);
