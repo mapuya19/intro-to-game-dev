@@ -6,8 +6,16 @@ global.deck_index = 0;
 
 global.player_card = noone;
 global.cpu_card = noone;
+global.nearest_button = noone;
+global.the_button = noone;
+
+global.darken = noone;
+global.even = noone;
+global.odd = noone;
+global.button_display = noone;
 
 global.hover = false;
+global.button_hover = false;
 
 global.player_selected = false;
 global.player_flipped = false;
@@ -15,6 +23,11 @@ global.cpu_choose = false;
 global.cpu_flipped = false;
 global.score_updated = false;
 
+global.darken_created = false;
+global.even_created = false;
+global.odd_created = false;
+
+global.button_selected = false;
 global.is_shuffled = false;
 
 global.deck = ds_list_create();
@@ -31,6 +44,7 @@ enum state {
 	setup_cpu,
 	play,
 	flip_score,
+	tie,
 	resolve,
 	reset,
 }

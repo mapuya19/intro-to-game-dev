@@ -134,7 +134,7 @@ switch(global.state) {
 							global.score_updated = true;
 						}
 					} else {
-						// no score update
+						global.state = state.tie;
 					}
 				}
 				
@@ -146,6 +146,92 @@ switch(global.state) {
 			} 
 		}
 				
+		break;
+	
+	case state.tie:
+		if (global.darken_created == false) {
+			var darken = instance_create_layer(room_width / 2, room_height / 2, "Instances", obj_darken);
+			audio_play_sound(snd_tie_music, 5, true);
+			global.darken = darken;
+			darken.depth = -y
+			global.darken_created = true;
+		}
+			
+		if (global.even_created == false) {
+			var even_card = instance_create_layer(room_width / 2, room_height / 2, "Instances", obj_button);
+			global.even = even_card;
+			even_card.card_type = button_index.even;
+			even_card.target_x = room_width / 3 + 0 * 100;
+			even_card.target_y = room_height / 2;
+			even_card.depth = darken.depth - 100;
+			global.even_created = true;
+		}
+			
+		if (global.odd_created == false) {
+			var odd_card = instance_create_layer(room_width / 2, room_height / 2, "Instances", obj_button);
+			global.odd = odd_card;
+			odd_card.card_type = button_index.odd;
+			odd_card.target_x = room_width / 3 + 2 * 100;
+			odd_card.target_y = room_height / 2;
+			odd_card.depth = darken.depth - 100;
+			global.odd_created = true;
+		}
+			
+		// hover and move button
+		if (global.button_hover == false && global.even_created == true && global.odd_created == true && global.nearest_button != noone && position_meeting(mouse_x, mouse_y, global.nearest_button)) {
+			global.button_hover = true;
+			global.saved_button_hover = global.nearest_button.target_y;
+			global.nearest_button.target_y = global.nearest_button.target_y - 15;
+		}
+		
+		if (global.button_hover == true && global.even_created == true && global.odd_created == true && global.nearest_button != noone && !position_meeting(mouse_x, mouse_y, global.nearest_button)) {
+			global.nearest_button.target_y = global.saved_button_hover;
+			global.button_hover = false;
+		}
+	
+		// player select and update score
+		if (global.button_selected == false && global.even_created == true && global.odd_created == true && global.nearest_button != noone && mouse_check_button_pressed(mb_left)) {
+			global.the_button = global.nearest_button;
+			
+			var button_display = instance_create_layer(0, 0, "Instances", obj_button_display);
+			global.button_display = button_display;
+				
+			var numberMatch = irandom_range(1, 9);
+			button_display.generated_num = numberMatch;
+			audio_stop_sound(snd_tie_music);
+	
+				
+			if (((global.the_button.card_type == button_index.even) && (numberMatch % 2 == 0)) || ((global.the_button.card_type == button_index.odd) && (numberMatch % 2 == 1))) {
+				//player won round
+				if (global.score_updated == false) {
+					obj_score.score_player++;
+					audio_play_sound(snd_win, 5, false);
+					global.score_updated = true;
+				}
+			} else {
+				// cpu won round
+				if (global.score_updated == false) {
+					obj_score.score_cpu++;
+					audio_play_sound(snd_lose, 5, false);
+					global.score_updated = true;
+				}
+			}
+			
+
+			if (alarm[9] < 0) {
+				alarm[9] = room_speed * 2.5;
+			}
+		}
+		
+		if (global.button_selected == true) {
+			instance_destroy(global.darken);
+			instance_destroy(global.even);
+			instance_destroy(global.odd);
+			instance_destroy(global.button_display);
+			global.state = state.resolve;
+		}
+		
+	
 		break;
 	
 	case state.resolve:
@@ -172,10 +258,18 @@ switch(global.state) {
 			alarm[3] = -1;
 			alarm[4] = -1;
 			alarm[5] = -1;
+			alarm[9] = -1;
 			
 			global.player_card = noone;
 			global.cpu_card = noone;
 			global.nearest_to_mouse = noone;
+			
+			global.the_button = noone;
+			global.button_hover = false;
+			global.darken_created = false;
+			global.even_created = false;
+			global.odd_created = false;
+			global.button_selected = false;
 			
 			global.player_selected = false;
 			global.player_flipped = false;
@@ -213,10 +307,18 @@ switch(global.state) {
 			alarm[3] = -1;
 			alarm[4] = -1;
 			alarm[5] = -1;
+			alarm[9] = -1;
 			
 			global.player_card = noone;
 			global.cpu_card = noone;
 			global.nearest_to_mouse = noone;
+			
+			global.the_button = noone;
+			global.button_hover = false;
+			global.darken_created = false;
+			global.even_created = false;
+			global.odd_created = false;
+			global.button_selected = false;
 			
 			global.player_selected = false;
 			global.player_flipped = false;

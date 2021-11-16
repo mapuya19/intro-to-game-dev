@@ -1,4 +1,4 @@
-/// @description Draw Cards
+/// @description Draw card
 
 if (face_up) {
 	switch card_type {
